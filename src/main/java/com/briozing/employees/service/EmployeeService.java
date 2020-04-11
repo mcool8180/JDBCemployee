@@ -3,24 +3,37 @@ import com.briozing.employees.models.EmployeeRequestVO;
 import com.briozing.employees.models.EmployeeResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import java.lang.String;
 
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class EmployeeService {
 
     private static JdbcTemplate jdbcTemplate;
+    private static SimpleJdbcInsert simpleJdbcInsert;
+    private DataSource dataSource;
     public EmployeeService(@Autowired DataSource dataSource){
-        jdbcTemplate=new JdbcTemplate(dataSource);
+        this.jdbcTemplate=new JdbcTemplate(dataSource);
+        this.dataSource=dataSource;
     }
 
+
     public EmployeeResponseVO addEmployee(EmployeeRequestVO employeeRequestVO){
-        int id = jdbcTemplate.update("insert into employee (name, emailId) values('"+employeeRequestVO.getName()+"','"+employeeRequestVO.getEmailId()+"')");
+        simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+                         .withTableName("employee")
+                        .usingGeneratedKeyColumns("id");
+        Map<String,String> inputs= new HashMap<>();
+        inputs.put("name",employeeRequestVO.getName());
+        inputs.put("emailId",employeeRequestVO.getEmailId());
+        Number id = simpleJdbcInsert.executeAndReturnKey(inputs);
         EmployeeResponseVO employeeResponseVO=new EmployeeResponseVO();
+        employeeResponseVO.setId(Integer.parseInt(String.valueOf(id)));
         employeeResponseVO.setName(employeeRequestVO.getName());
         employeeResponseVO.setEmailId(employeeRequestVO.getEmailId());
         return employeeResponseVO;

@@ -1,7 +1,19 @@
 pipeline {
    agent any
-
+   tools {
+          maven 'M3'
+        }
    stages {
+
+     stage('Initialize'){
+      steps {
+        script {
+            def dockerHome = tool 'myDocker'
+            env.PATH = "${dockerHome}/bin:${env.PATH}"
+           }
+         }
+      }
+
       stage('Employee Pipeline') {
          steps {
             echo 'Employee Pipeline started'
@@ -28,13 +40,19 @@ pipeline {
      stage('Build') {
          steps {
 
-         sh 'mvn clean package'
+//          sh 'mvn clean package'
 //             sh './service.sh'
 // to do
 // build service jar
 // 1. docker image build from jar
 //3 docker image run
-            echo 'Build Done'
+           sh 'docker stop emp-service'
+           sh 'docker rm emp-service'
+           echo 'Current Working Directory'
+           sh 'pwd'
+           sh 'docker build -t emp-service .'
+           sh 'docker run --name emp-service -it -d -p 8888:8888 -v /var/run/mysqld/mysqld.sock:/tmp/mysql.sock --network=host emp-service'
+              echo 'Build Done'
 
          }
       }
@@ -42,29 +60,29 @@ pipeline {
 
 
 
-//      stage('Checkout Test') {
-//           steps {
-//
-//               git branch:'master', credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/mcool8180/employee-restAssured.git'
-//
-//         echo 'Checkout Test Done'
-//         }
-//       }
-//
-//       stage('Compile Test') {
-//          steps {
-//             sh 'mvn clean compile'
-//             echo 'Compilation of Test is done'
-//
-//          }
-//       }
-//      stage('Test') {
-//          steps {
-//             sh 'mvn clean test -Dgroups=addEmployee'
-//             echo 'Test case passed successfully'
-//
-//          }
-//       }
+      stage('Checkout Test') {
+         steps {
+
+               git branch:'master', credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/mcool8180/employee-restAssured.git'
+
+         echo 'Checkout Test Done'
+         }
+       }
+
+      stage('Compile Test') {
+          steps {
+             sh 'mvn clean package'
+             echo 'Compilation of Test is done'
+
+          }
+       }
+      stage('Test') {
+         steps {
+            sh 'mvn clean test -Dgroups=addEmployee'
+            echo 'Test case passed successfully'
+
+         }
+       }
 
 
 

@@ -14,11 +14,7 @@ pipeline {
          }
       }
 
-      stage('Employee Pipeline') {
-         steps {
-            echo 'Employee Pipeline started'
-         }
-      }
+
 
       stage('Checkout') {
           steps {
@@ -39,19 +35,18 @@ pipeline {
       }
      stage('Build') {
          steps {
-
-//          sh 'mvn clean package'
+          sh 'mvn clean package'
 //             sh './service.sh'
 // to do
 // build service jar
 // 1. docker image build from jar
 //3 docker image run
-           sh 'docker stop emp-service'
-           sh 'docker rm emp-service'
+           sh 'docker stop docker-emp-service'
+           sh 'docker rm docker-emp-service'
            echo 'Current Working Directory'
            sh 'pwd'
-           sh 'docker build -t emp-service .'
-           sh 'docker run --name emp-service -it -d -p 8888:8888 -v /var/run/mysqld/mysqld.sock:/tmp/mysql.sock --network=host emp-service'
+           sh 'docker build -t docker-emp-service .'
+           sh 'docker run --name docker-emp-service -it -d -p 8888:8888 -v /var/run/mysqld/mysqld.sock:/tmp/mysql.sock --network=host docker-emp-service'
               echo 'Build Done'
 
          }
@@ -71,7 +66,7 @@ pipeline {
 
       stage('Compile Test') {
           steps {
-             sh 'mvn clean package'
+             sh 'mvn clean compile'
              echo 'Compilation of Test is done'
 
           }

@@ -1,0 +1,14 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2020-05-06 17:17:31.209 UTC</timestamp>
+  <md5sum>1a7c40b2998200a7d383e046edd7afe1</md5sum>
+  <fileName>Credential id=GIT_HUB_CREDENTIALS name=mcool8180/****** (GIT_HUB_CREDENTIALS)</fileName>
+  <usages/>
+  <facets>
+    <com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet plugin="credentials@2.3.7">
+      <timestamp>1588785451143</timestamp>
+      <itemFullName>Jenkinsfile_pipeline</itemFullName>
+      <timestamp0>1588785451143</timestamp0>
+    </com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet>
+  </facets>
+</fingerprint>

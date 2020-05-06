@@ -27,7 +27,13 @@ pipeline {
       }
      stage('Build') {
          steps {
-            sh './service.sh'
+
+         sh 'mvn clean package'
+//             sh './service.sh'
+// to do
+// build service jar
+// 1. docker image build from jar
+//3 docker image run
             echo 'Build Done'
 
          }
@@ -36,29 +42,29 @@ pipeline {
 
 
 
-     stage('Checkout Test') {
-          steps {
-
-              git branch:'master', credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/mcool8180/employee-restAssured.git'
-
-        echo 'Checkout Test Done'
-        }
-      }
-
-      stage('Compile Test') {
-         steps {
-            sh 'mvn clean compile'
-            echo 'Compilation of Test is done'
-
-         }
-      }
-     stage('Test') {
-         steps {
-            sh 'mvn clean test -Dgroups=addEmployee'
-            echo 'Test case passed successfully'
-
-         }
-      }
+//      stage('Checkout Test') {
+//           steps {
+//
+//               git branch:'master', credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/mcool8180/employee-restAssured.git'
+//
+//         echo 'Checkout Test Done'
+//         }
+//       }
+//
+//       stage('Compile Test') {
+//          steps {
+//             sh 'mvn clean compile'
+//             echo 'Compilation of Test is done'
+//
+//          }
+//       }
+//      stage('Test') {
+//          steps {
+//             sh 'mvn clean test -Dgroups=addEmployee'
+//             echo 'Test case passed successfully'
+//
+//          }
+//       }
 
 
 
